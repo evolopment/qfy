@@ -34,8 +34,8 @@ The roadmap of Qfy is:
 
 - *0.1.x*: Adding support to the node.js API. It will be 0.1.x while it is uncompleted, although they will be some testing in progress.
 - *0.2.x*: Adding testing to the node.js API. It will be 0.2.x while testing is uncompleted.
-- *1.0.x*: Full API support (4.x LTS) for first level calls (i.e. all asynchronous functions covered).
-- *1.1.x*: Full API support (4.x LTS) for second level calls (i.e. call that return objects that may contain asynchronous functions, etc.)
+- *1.0.x*: Full API support (4.x LTS) for direct calls (i.e. all asynchronous functions covered).
+- *1.1.x*: Full API support (4.x LTS) for indirect calls (i.e. call that return objects that may contain asynchronous functions, etc.)
 - *1.2.x*: Add 5.x Stable support
  
 Current status:
@@ -48,21 +48,21 @@ Current status:
     - *5.x*: ☐ Not reviewed
 - *child_process*:
     - *4.x*:
-        - 1st Level: exec, execFile
+        - Direct: exec, execFile
             - ☑ Reviewed 
             - ☐ Implemented
             - ☐ Tested
-        - 2nd Level: ChildProcess.send, spawn (->ChildProcess), fork (->ChildProcess)
+        - Indirect: ChildProcess.send, spawn (->ChildProcess), fork (->ChildProcess)
             - ☑ Reviewed 
             - ☐ Implemented
             - ☐ Tested
 - *cluster*:
     - *4.x*:
-        - 1st Level: disconnect
+        - Direct: disconnect
             - ☑ Reviewed 
             - ☐ Implemented
             - ☐ Tested
-        - 2nd Level: Worker.send, fork (->Worker), worker (is a Worker)
+        - Indirect: Worker.send, fork (->Worker), worker (is a Worker)
             - ☑ Reviewed 
             - ☐ Implemented
             - ☐ Tested
@@ -72,51 +72,51 @@ Current status:
     - *5.x*: ☐ Not reviewed
 - *crypto*:
     - *4.x*:
-        - 1st Level: pbkdf2, randomBytes
+        - Direct: pbkdf2, randomBytes
             - ☑ Reviewed 
             - ☐ Implemented
             - ☐ Tested
-        - 2nd Level: ☑ N/A (doesn't contain asynchronous calls)
+        - Indirect: ☑ N/A (doesn't contain asynchronous calls)
     - *5.x*: ☐ Not reviewed
 - *dns*:
     - *4.x*:
-        - 1st Level: lookup, lookupService, resolve, resolve4, resolve6, resolveMx. resolveTxt, resolveSrv, resolveSoa, resolveNs, resolveCname, reverse
+        - Direct: lookup, lookupService, resolve, resolve4, resolve6, resolveMx. resolveTxt, resolveSrv, resolveSoa, resolveNs, resolveCname, reverse
             - ☑ Reviewed 
             - ☐ Implemented
             - ☐ Tested        
-        - 2nd Level: ☑ N/A (doesn't contain asynchronous calls)
+        - Indirect: ☑ N/A (doesn't contain asynchronous calls)
     - *5.x*: ☐ Not reviewed
 - *domain*: [Deprecated]
     - *4.x*:
-        - 1st Level: ☑ N/A (doesn't contain asynchronous calls)
-        - 2nd Level: Domain.bind, Domain.intercept, create (->Domain)
+        - Direct: ☑ N/A (doesn't contain asynchronous calls)
+        - Indirect: Domain.bind, Domain.intercept, create (->Domain)
 - *events*:
     - *4.x*: ☑ N/A (doesn't contain asynchronous calls) 
     - *5.x*: ☐ Not reviewed
 - *fs*:
     - *4.x*:
-        - 1st Level: rename, ftruncate, truncate, chown, fchown, lchown, chmod, fchmod, lchmod, stat, lstat, fstat,
+        - Direct: rename, ftruncate, truncate, chown, fchown, lchown, chmod, fchmod, lchmod, stat, lstat, fstat,
                      link, symlink, readlink, realpath, unlink, rmdir, mkdir, readdir, close, open, utimes, futimes,
                      fsync, write, write (2 versions), read, readFile, writeFile, appendFile, exists, access
             - ☑ *Implemented*
             - ☐ Tested
-        - 2nd Level: ☑ N/A (doesn't contain asynchronous calls)
+        - Indirect: ☑ N/A (doesn't contain asynchronous calls)
     - *5.x*: ☐ Not reviewed
 - *globals*:
     - *4.x*:
-        - 1st Level: setTimeout (not node.js callback, but...), setInmediate
+        - Direct: setTimeout (not node.js callback, but...), setInmediate
             - ☑ Reviewed 
             - ☐ Implemented
             - ☐ Tested        
-        - 2nd Level: ☑ N/A (doesn't contain asynchronous calls)
+        - Indirect: ☑ N/A (doesn't contain asynchronous calls)
     - *5.x*: ☐ Not reviewed
 - *http*:
     - *4.x*:
-        - 1st Level: request, get
+        - Direct: request, get
             - ☑ Reviewed 
             - ☐ Implemented
             - ☐ Tested
-        - 2nd Level: Server.listen (3 versions), Server.close, Server.request event (2nd param is response), !Server,timeout (may be invoked several times), 
+        - Indirect: Server.listen (3 versions), Server.close, Server.request event (2nd param is response), !Server,timeout (may be invoked several times), 
                      ServerResponse.write, ServerResponse.end, ClientRequest.write, ClientRequest.end, 
                      createServer (->Server), createClient (->ClientRequest), request (->ClientRequest)
             - ☑ Reviewed 
@@ -124,11 +124,11 @@ Current status:
             - ☐ Tested
 - *https*:
     - *4.x*:
-        - 1st Level: request, get
+        - Direct: request, get
             - ☑ Reviewed 
             - ☐ Implemented
             - ☐ Tested
-        - 2nd Level: Server (inherits tls.Server & events from http.Server), createServer (->Server), request, ?? (module docs are somewhat confusing)
+        - Indirect: Server (inherits tls.Server & events from http.Server), createServer (->Server), request, ?? (module docs are somewhat confusing)
             - ☑ Reviewed 
             - ☐ Implemented
             - ☐ Tested
@@ -136,11 +136,11 @@ Current status:
 
 - *net*:
     - *4.x*:
-        - 1st Level: ☑ N/A (doesn't contain asynchronous calls)
+        - Direct: ☑ N/A (doesn't contain asynchronous calls)
             - ☑ Reviewed 
             - ☐ Implemented
             - ☐ Tested
-        - 2nd Level: createServer (->Server), (connect,createConnection) (3 versions) (->Socket),
+        - Indirect: createServer (->Server), (connect,createConnection) (3 versions) (->Socket),
                      Server.listen (4 versions), Server.close, Server.getConnections, 
                      Socket new (->Socket), Socket.connect?, Socket.write, setTimeout? 
             - ☑ Reviewed 
@@ -155,11 +155,11 @@ Current status:
     - *5.x*: ☐ Not reviewed
 - *process*:
     - *4.x*: 
-        - 1st Level: nextTick, send
+        - Direct: nextTick, send
             - ☑ Reviewed 
             - ☐ Implemented
             - ☐ Tested
-        - 2nd Level: ☑ N/A (doesn't contain asynchronous calls)
+        - Indirect: ☑ N/A (doesn't contain asynchronous calls)
     - *5.x*: ☐ Not reviewed
 - *punycode*:
     - *4.x*: ☑ N/A (doesn't contain asynchronous calls)
@@ -169,8 +169,8 @@ Current status:
     - *5.x*: ☐ Not reviewed
 - *readline*:
     - *4.x*: 
-        - 1st Level: ☑ N/A (doesn't contain asynchronous calls)
-        - 2nd Level: createInterface (->Interface), Interface.question
+        - Direct: ☑ N/A (doesn't contain asynchronous calls)
+        - Indirect: createInterface (->Interface), Interface.question
             - ☑ Reviewed 
             - ☐ Implemented
             - ☐ Tested
@@ -180,11 +180,11 @@ Current status:
     - *5.x*: ☐ Not reviewed
 - *stream*:
     - *4.x*: 
-        - 1st Level: ☑ N/A (doesn't contain asynchronous calls)
+        - Direct: ☑ N/A (doesn't contain asynchronous calls)
             - ☑ Reviewed 
             - ☐ Implemented
             - ☐ Tested
-        - 2nd Level: Writeable.write, Duplex (inherits Writeable), Transform (inherits Duplex -> Writeable),
+        - Indirect: Writeable.write, Duplex (inherits Writeable), Transform (inherits Duplex -> Writeable),
                      news?
             - ☑ Reviewed 
             - ☐ Implemented
@@ -195,11 +195,11 @@ Current status:
     - *5.x*: ☐ Not reviewed
 - *tls*:
     - *4.x*:
-        - 1st Level: connect (2 versions)
+        - Direct: connect (2 versions)
             - ☑ Reviewed 
             - ☐ Implemented
             - ☐ Tested
-        - 2nd Level: Server.listen, Server.close, TLSSocket.renegotiate
+        - Indirect: Server.listen, Server.close, TLSSocket.renegotiate
             - ☑ Reviewed 
             - ☐ Implemented
             - ☐ Tested
@@ -209,11 +209,11 @@ Current status:
     - *5.x*: ☐ Not reviewed
 - *dgram* (UDP/Datagram):
     - *4.x*:
-        - 1st Level: createSocket (2 versions)
+        - Direct: createSocket (2 versions)
             - ☑ Reviewed 
             - ☐ Implemented
             - ☐ Tested
-        - 2nd Level: Socket.send, Socket.bind (2 versions), Socket.close
+        - Indirect: Socket.send, Socket.bind (2 versions), Socket.close
             - ☑ Reviewed 
             - ☐ Implemented
             - ☐ Tested
@@ -223,11 +223,11 @@ Current status:
     - *5.x*: ☐ Not reviewed
 - *util*:
     - *4.x*:
-        - 1st Level: pump
+        - Direct: pump
             - ☑ Reviewed 
             - ☐ Implemented
             - ☐ Tested
-        - 2nd Level: ☑ N/A (doesn't contain asynchronous calls)
+        - Indirect: ☑ N/A (doesn't contain asynchronous calls)
     - *5.x*: ☐ Not reviewed
 - *v8*:
     - *4.x*: ☑ N/A (doesn't contain asynchronous calls)
@@ -236,11 +236,11 @@ Current status:
     - *4.x*: ☑ N/A (doesn't contain asynchronous calls)
     - *5.x*: ☐ Not reviewed
 - *zlib*:
-        - 1st Level: deflate, deflateRaw, gzip, gunzip, inflate, inflateRaw, unzip
+        - Direct: deflate, deflateRaw, gzip, gunzip, inflate, inflateRaw, unzip
             - ☑ Reviewed 
             - ☐ Implemented
             - ☐ Tested
-        - 2nd Level: Zlib.flush, Zlib.params 
+        - Indirect: Zlib.flush, Zlib.params 
             - ☑ Reviewed 
             - ☐ Implemented
             - ☐ Tested

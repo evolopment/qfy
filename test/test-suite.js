@@ -9,25 +9,27 @@ var path = require('path');
 
 var expect = require('chai').expect;
 
+var Q = require('q');
+
 // assert -> N/A
 // buffer -> N/A
 
 describe.skip('child_process', function() {
-    // Level 1
+    // Direct
     it('exec()');
     it('execFile()');
 
-    // Level 2
+    // Indirect
     it('ChildProcess.send()');
     it('spawn()');
     it('fork()');
 });
 
 describe.skip('cluster', function() {
-    // Level 1
+    // Direct
     it('disconnect()');
 
-    // Level 2
+    // Indirect
     it('Worker.send()');
     it('fork()');
     it('.worker');
@@ -36,15 +38,15 @@ describe.skip('cluster', function() {
 // console -> N/A
 
 describe.skip('crypto', function() {
-    // Level 1
+    // Direct
     it('pbkdf2');
     it('randomBytes');
 
-    // Level 2 -> N/A
+    // Indirect -> N/A
 });
 
 describe.skip('dns', function() {
-    // Level 1
+    // Direct
     it('lookup');
     it('lookupService');
     it('resolve');
@@ -58,12 +60,12 @@ describe.skip('dns', function() {
     it('resolveCname');
     it('reverse');
 
-    // Level 2 --> N/A
+    // Indirect --> N/A
 });
 
 describe.skip('domain', function() {
-    // Level 1 --> N/A
-    // Level 2
+    // Direct --> N/A
+    // Indirect
     it('Domain.bind');
     it('Domain.intercept');
     it('create');
@@ -79,7 +81,7 @@ describe('fs', function() {
     var sampleFile2Path = path.join(tmp, 'anotherFile.txt');
     var sampleFile1Content = 'Hi from QFY!';
 
-    // Level 1
+    // Direct
     it('rename [OK]', function() {
         // preconditions
         fs.writeFileSync(sampleFile1Path, sampleFile1Content, 'UTF8');
@@ -109,17 +111,70 @@ describe('fs', function() {
         );
     });
 
-    it('ftruncate', function() {
+    it('ftruncate [OK]', function() {
         // preconditions
         fs.writeFileSync(sampleFile1Path, sampleFile1Content, 'UTF8');
         var dfd = Q.defer();
-        fs.open('')
+        fs.open(sampleFile1Path,'w+', function(err, fd) {
+            if(err) {
+                dfd.reject(err);
+            } else {
+                qfs.ftruncate(fd, 10).then( // test
+                    function() {
+                        fs.close(fd, function(err) {
+                            if(err) {
+                                fs.unlinkSync(sampleFile1Path);
+                                dfd.reject(err);
+                            } else {
+                                var fsInfo = fs.statSync(sampleFile1Path);
+                                try {
+                                    fs.unlinkSync(sampleFile1Path);
+                                    expect(fsInfo.size).to.equal(10);
+                                    dfd.resolve();
+                                } catch(err) {
+                                    fs.unlinkSync(sampleFile1Path);
+                                    dfd.reject(err);
+                                }
 
-        return dfd.promise();
+                            }
+                        });
+                    },
+                    function(err) {
+                        fs.unlinkSync(sampleFile1Path);
+                        dfd.reject(err);
+                    }
+                ).done();
+            }
+        });
+
+        return dfd.promise;
     });
 
+    it('ftruncate [KO]');
 
-    it('truncate');
+    it('truncate [OK]', function() {
+        fs.writeFileSync(sampleFile1Path, sampleFile1Content, 'UTF8');
+        return qfs.truncate(sampleFile1Path, 10).then(
+            function() {
+                var stats = fs.statSync(sampleFile1Path);
+                expect(stats.size).to.equal(10);
+            }
+        ).fin(function() {
+            fs.unlinkSync(sampleFile1Path);
+        });
+    });
+
+    it('truncate [KO]', function() {
+        return qfs.truncate(sampleFile1Path, 10).then(
+            function() {
+                throw new Error('truncate [KO] shouldn\'t succedd');
+            },
+            function(err) {
+                return true;
+            }
+        );
+    });
+
     it('chown');
     it('fchown');
     it('lchown');
@@ -150,23 +205,23 @@ describe('fs', function() {
     it('exists');
     it('access');
 
-    // Level 2 -> N/A
+    // Indirect -> N/A
 });
 
 describe('globals', function() {
-    // Level 1
+    // Direct
     it('setTimeout');
     it('setInmediate');
 
-    // Level 2 -> N/A
+    // Indirect -> N/A
 });
 
 describe('http', function() {
-    // Level 1
+    // Direct
     it('request');
     it('get');
 
-    // Level 2
+    // Indirect
     it('Server.listen (3 versions)');
     it('Server.close');
     it('Server.request event');
@@ -180,19 +235,19 @@ describe('http', function() {
 });
 
 describe('https', function() {
-    // Level 1
+    // Direct
     it('request');
     it('get');
 
-    // Level 2
+    // Indirect
     it('Server (inherits tls.Server & events from http.Server)');
     it('createServer (->Server)');
     it('request (->ClientRequest');
 });
 
 describe('net', function() {
-    // Level 1 -> N/A
-    // Level 2
+    // Direct -> N/A
+    // Indirect
     it('createServer (->Server), (connect,createConnection) (3 versions) (->Socket), Server.listen (4 versions), Server.close, Server.getConnections, Socket new (->Socket), Socket.connect?, Socket.write');
 });
 
@@ -200,19 +255,19 @@ describe('net', function() {
 // path -> N/A
 
 describe('process', function() {
-    // Level 1
+    // Direct
     it('nextTick');
     it('send');
 
-    // Level 2
+    // Indirect
 });
 
 // punycode -> N/A
 // querystring -> N/A
 
 describe('readline', function() {
-    // Level 1 -> N/A
-    // Level 2
+    // Direct -> N/A
+    // Indirect
     it('createInterface (->Interface)');
     it('Interface.question');
 });
@@ -220,8 +275,8 @@ describe('readline', function() {
 // repl -> N/A
 
 describe('stream', function() {
-    // Level 1 -> N/A
-    // Level 2
+    // Direct -> N/A
+    // Indirect
     it('Writeable.write');
     it('Duplex (inherits Writeable)');
     it('Transform (inherits Duplex -> Writeable)');
@@ -231,10 +286,10 @@ describe('stream', function() {
 // stringdecoder -> N/A
 
 describe('tls', function() {
-    // Level 1 -> N/A
+    // Direct -> N/A
     it('connect (2 versions)');
 
-    // Level 2
+    // Indirect
     it('Server.listen');
     it('Server.close');
     it('TLSSocket.renegotiate');
@@ -243,10 +298,10 @@ describe('tls', function() {
 // tty -> N/A
 
 describe('dgram', function() {
-    // Level 1 -> N/A
+    // Direct -> N/A
     it('createSocket (2 versions)');
 
-    // Level 2
+    // Indirect
     it('Socket.send');
     it('Socket.bind (2 versions)');
     it('socket.close');
@@ -255,16 +310,16 @@ describe('dgram', function() {
 // url
 
 describe('util', function() {
-    // Level 1 -> N/A
+    // Direct -> N/A
     it('pump');
-    // Level 2
+    // Indirect
 });
 
 // v8
 // vm
 
 describe('zlib', function() {
-    // Level 1 -> N/A
+    // Direct -> N/A
     it('deflate');
     it('deflateRaw');
     it('gzip');
@@ -274,7 +329,7 @@ describe('zlib', function() {
     it('deflate');
     it('unzip');
 
-    // Level 2 -> N/A
+    // Indirect -> N/A
     it('Zlib.flush');
     it('Zlib.params');
 });
