@@ -1,6 +1,6 @@
 {
   "name": "@evolopment/qfy",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Makes asynchronous node.js calls Q (promises) friendly",
   "keywords": [
     "API",
@@ -8,6 +8,13 @@
     "Q"
   ],
   "author": "Jaime Blázquez <code@evolopment.com> (http://evolopment.com/)",
+  "repository" : {
+    "type": "git",
+    "url": "https://github.com/evolopment/qfy.git"
+  },
+  "bugs": {
+    "url": "https://github.com/evolopment/qfy/issues"
+  },
   "license": "BSD-2-Clause",
   "scripts": {
     "test": "mocha test/test-suite.js",
