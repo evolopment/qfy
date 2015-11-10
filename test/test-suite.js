@@ -169,7 +169,7 @@ describe('fs', function() {
             function() {
                 throw new Error('truncate [KO] shouldn\'t succedd');
             },
-            function(err) {
+            function() {
                 return true;
             }
         );
@@ -199,8 +199,24 @@ describe('fs', function() {
     it('fsync');
     it('write (2 versions)');
     it('read');
-    it('readFile');
+
+    it('readFile [OK]', function() {
+        // precondition
+        fs.writeFileSync(sampleFile1Path, sampleFile1Content, 'UTF8');
+        // test
+        return qfs.readFile(sampleFile1Path, 'UTF8').then(
+            function(data) {
+                expect(data).to.equal(sampleFile1Content);
+            }
+        ).fin(
+            function() {
+                fs.unlinkSync(sampleFile1Path);
+            }
+        )
+    });
+
     it('writeFile');
+
     it('appendFile');
     it('exists');
     it('access');

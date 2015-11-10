@@ -49,8 +49,7 @@ Current status:
 - *child_process*:
     - *4.x*:
         - Direct: exec, execFile
-            - ☑ Reviewed 
-            - ☐ Implemented
+            - ☑ Implemented
             - ☐ Tested
         - Indirect: ChildProcess.send, spawn (->ChildProcess), fork (->ChildProcess)
             - ☑ Reviewed 
@@ -59,8 +58,7 @@ Current status:
 - *cluster*:
     - *4.x*:
         - Direct: disconnect
-            - ☑ Reviewed 
-            - ☐ Implemented
+            - ☑ Implemented
             - ☐ Tested
         - Indirect: Worker.send, fork (->Worker), worker (is a Worker)
             - ☑ Reviewed 
@@ -73,16 +71,14 @@ Current status:
 - *crypto*:
     - *4.x*:
         - Direct: pbkdf2, randomBytes
-            - ☑ Reviewed 
-            - ☐ Implemented
+            - ☑ Implemented
             - ☐ Tested
         - Indirect: ☑ N/A (doesn't contain asynchronous calls)
     - *5.x*: ☐ Not reviewed
 - *dns*:
     - *4.x*:
         - Direct: lookup, lookupService, resolve, resolve4, resolve6, resolveMx. resolveTxt, resolveSrv, resolveSoa, resolveNs, resolveCname, reverse
-            - ☑ Reviewed 
-            - ☐ Implemented
+            - ☑ Implemented
             - ☐ Tested        
         - Indirect: ☑ N/A (doesn't contain asynchronous calls)
     - *5.x*: ☐ Not reviewed
@@ -99,22 +95,20 @@ Current status:
                      link, symlink, readlink, realpath, unlink, rmdir, mkdir, readdir, close, open, utimes, futimes,
                      fsync, write, write (2 versions), read, readFile, writeFile, appendFile, exists, access
             - ☑ *Implemented*
-            - ☐ Tested
+            - ☐ Testing
         - Indirect: ☑ N/A (doesn't contain asynchronous calls)
     - *5.x*: ☐ Not reviewed
 - *globals*:
     - *4.x*:
-        - Direct: setTimeout (not node.js callback, but...), setInmediate
-            - ☑ Reviewed 
-            - ☐ Implemented
-            - ☐ Tested        
+        - Direct: ☑ N/A (doesn't contain asynchronous calls). The setTimeout and setInmediate functions where considered
+          but setTimeout is quite equivalent to Q.delay() and setInmediate doesn't fit into Q, as is expected to run
+          in the same event loop run.
         - Indirect: ☑ N/A (doesn't contain asynchronous calls)
     - *5.x*: ☐ Not reviewed
 - *http*:
     - *4.x*:
         - Direct: request, get
-            - ☑ Reviewed 
-            - ☐ Implemented
+            - ☑ Implemented
             - ☐ Tested
         - Indirect: Server.listen (3 versions), Server.close, Server.request event (2nd param is response), !Server,timeout (may be invoked several times), 
                      ServerResponse.write, ServerResponse.end, ClientRequest.write, ClientRequest.end, 
@@ -125,8 +119,7 @@ Current status:
 - *https*:
     - *4.x*:
         - Direct: request, get
-            - ☑ Reviewed 
-            - ☐ Implemented
+            - ☑ Implemented
             - ☐ Tested
         - Indirect: Server (inherits tls.Server & events from http.Server), createServer (->Server), request, ?? (module docs are somewhat confusing)
             - ☑ Reviewed 
@@ -137,9 +130,6 @@ Current status:
 - *net*:
     - *4.x*:
         - Direct: ☑ N/A (doesn't contain asynchronous calls)
-            - ☑ Reviewed 
-            - ☐ Implemented
-            - ☐ Tested
         - Indirect: createServer (->Server), (connect,createConnection) (3 versions) (->Socket),
                      Server.listen (4 versions), Server.close, Server.getConnections, 
                      Socket new (->Socket), Socket.connect?, Socket.write, setTimeout? 
@@ -155,9 +145,9 @@ Current status:
     - *5.x*: ☐ Not reviewed
 - *process*:
     - *4.x*: 
-        - Direct: nextTick, send
-            - ☑ Reviewed 
-            - ☐ Implemented
+        - Direct: send. nextTick was considered, but as in timeout or setInmediate, their semantics are too related
+          to the node.js event loop and wrapping it with Q could be confusing at least.
+            - ☑ Implemented
             - ☐ Tested
         - Indirect: ☑ N/A (doesn't contain asynchronous calls)
     - *5.x*: ☐ Not reviewed
@@ -181,9 +171,6 @@ Current status:
 - *stream*:
     - *4.x*: 
         - Direct: ☑ N/A (doesn't contain asynchronous calls)
-            - ☑ Reviewed 
-            - ☐ Implemented
-            - ☐ Tested
         - Indirect: Writeable.write, Duplex (inherits Writeable), Transform (inherits Duplex -> Writeable),
                      news?
             - ☑ Reviewed 
@@ -196,8 +183,7 @@ Current status:
 - *tls*:
     - *4.x*:
         - Direct: connect (2 versions)
-            - ☑ Reviewed 
-            - ☐ Implemented
+            - ☑ Implemented
             - ☐ Tested
         - Indirect: Server.listen, Server.close, TLSSocket.renegotiate
             - ☑ Reviewed 
@@ -210,8 +196,7 @@ Current status:
 - *dgram* (UDP/Datagram):
     - *4.x*:
         - Direct: createSocket (2 versions)
-            - ☑ Reviewed 
-            - ☐ Implemented
+            - ☑ Implemented
             - ☐ Tested
         - Indirect: Socket.send, Socket.bind (2 versions), Socket.close
             - ☑ Reviewed 
@@ -224,8 +209,7 @@ Current status:
 - *util*:
     - *4.x*:
         - Direct: pump
-            - ☑ Reviewed 
-            - ☐ Implemented
+            - ☑ Implemented
             - ☐ Tested
         - Indirect: ☑ N/A (doesn't contain asynchronous calls)
     - *5.x*: ☐ Not reviewed
@@ -237,8 +221,7 @@ Current status:
     - *5.x*: ☐ Not reviewed
 - *zlib*:
         - Direct: deflate, deflateRaw, gzip, gunzip, inflate, inflateRaw, unzip
-            - ☑ Reviewed 
-            - ☐ Implemented
+            - ☑ Implemented
             - ☐ Tested
         - Indirect: Zlib.flush, Zlib.params 
             - ☑ Reviewed 
