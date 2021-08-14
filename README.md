@@ -1,3 +1,21 @@
+DEPRECATED!
+===========
+
+This project is *uncomplete and absolutely unnecesary* now.
+
+Node has good Promise support, so no need for Q, and the standard library has `promisify`.
+So, to achieve the same result you can do something like:
+
+```
+const { promisify } = require('util');
+const fs = require('fs');
+const [ readFile, writeFile ] = [ fs.readFile, fs.writeFile ].map(promisify);
+```
+
+See [https://nodejs.org/docs/latest-v14.x/api/util.html#util_util_promisify_original].
+
+There's a point to create a package similar to this one but with Node `promisify`, but not to update this one.
+
 Qfy
 ===
 

@@ -1,7 +1,7 @@
 {
   "name": "@evolopment/qfy",
-  "version": "0.2.1",
-  "description": "Makes asynchronous node.js calls Q (promises) friendly",
+  "version": "0.2.2",
+  "description": "DEPRECATED",
   "keywords": [
     "API",
     "Asynchronous",
